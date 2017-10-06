@@ -25,4 +25,13 @@ public class UserController {
     public User getUser(@PathVariable Long id) {
         return users.get(id);
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public String updateUser(@PathVariable Long id, @ModelAttribute User user) {
+        User u = users.get(id);
+        u.setName(user.getName());
+        u.setAge(user.getAge());
+        users.put(id, u);
+        return "update success";
+    }
 }

@@ -1,10 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -22,5 +19,10 @@ public class UserController {
     public String addUser(@ModelAttribute User user) {
         users.put(user.getId(), user);
         return "success";
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public User getUser(@PathVariable Long id) {
+        return users.get(id);
     }
 }

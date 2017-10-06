@@ -62,6 +62,10 @@ public class DemoApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo("[{\"id\":1,\"name\":\"Alice\",\"age\":22}]")));
 
+        request = get("/user/1");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("[{\"id\":1,\"name\":\"Alice\",\"age\":22}]")));
+
 
     }
 

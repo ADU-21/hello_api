@@ -18,9 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -95,5 +93,25 @@ public class DemoApplicationTests {
         request = get("/users/1");
         mvc.perform(request)
                 .andExpect(content().string(equalTo("{\"id\":1,\"name\":\"Alice\",\"age\":23}")));
+    }
+
+    @Test
+    public void deleteRemoveUser() throws Exception {
+        RequestBuilder request;
+        request = post("/users/")
+                .param("id", "1")
+                .param("name", "Alice")
+                .param("age", "22");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("add success")));
+
+        request = delete("/users/1");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("remove success")));
+
+        request = get("/users/");
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("[]")));
     }
 }

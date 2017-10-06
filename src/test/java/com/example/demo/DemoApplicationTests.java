@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,27 +26,44 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = MockServletContext.class)
 public class DemoApplicationTests {
 
-	private MockMvc mvc;
+    private MockMvc mvc;
 
-	@Before
-	public void setUp() throws Exception {
-		mvc = MockMvcBuilders.standaloneSetup(
-				new HelloController(),
-				new UserController()).build();
-	}
+    @Before
+    public void setUp() throws Exception {
+        mvc = MockMvcBuilders.standaloneSetup(
+                new HelloController(),
+                new UserController()).build();
+    }
 
-	@Test
-	public void getHello() throws Exception {
-		mvc.perform(get("/hello").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo("Hello, World!")));
-	}
+    @Test
+    public void getHello() throws Exception {
+        mvc.perform(get("/hello").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("Hello, World!")));
+    }
 
-	@Test
-	public void testUserController() throws Exception {
-		RequestBuilder request = get("/users/");
-		mvc.perform(request)
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo("[]")));
-	}
+    @Test
+    public void testUserController() throws Exception {
+        RequestBuilder request;
+        request = get("/users/");
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("[]")));
+
+        request = post("/users/")
+                .param("id", "1")
+                .param("name", "Alice")
+                .param("age", "22");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("success")));
+
+        request = get("/users/");
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo("[{\"id\":1,\"name\":\"Alice\",\"age\":22}]")));
+
+
+    }
+
+
 }

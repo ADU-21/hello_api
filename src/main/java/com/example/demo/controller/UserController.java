@@ -34,4 +34,10 @@ public class UserController {
         users.put(id, u);
         return "update success";
     }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public String removeUser(@PathVariable Long id) {
+        users.remove(id);
+        return "remove success";
+    }
 }

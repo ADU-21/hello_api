@@ -16,9 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,7 +63,7 @@ public class DemoApplicationTests {
                 .param("name", "Alice")
                 .param("age", "22");
         mvc.perform(request)
-                .andExpect(content().string(equalTo("success")));
+                .andExpect(content().string(equalTo("add success")));
 
         request = get("/users/");
         mvc.perform(request)
@@ -73,5 +75,25 @@ public class DemoApplicationTests {
                 .andExpect(content().string(equalTo("{\"id\":1,\"name\":\"Alice\",\"age\":22}")));
     }
 
+    @Test
+    public void putUpdateUser() throws Exception {
+        RequestBuilder request;
+        request = post("/users/")
+                .param("id", "1")
+                .param("name", "Alice")
+                .param("age", "22");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("add success")));
 
+        request = put("/users/1")
+                .param("name", "Alice")
+                .param("age", "23");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("update success")));
+
+
+        request = get("/users/1");
+        mvc.perform(request)
+                .andExpect(content().string(equalTo("{\"id\":1,\"name\":\"Alice\",\"age\":23}")));
+    }
 }

@@ -18,7 +18,7 @@ public class UserController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public String addUser(@ModelAttribute User user) {
         users.put(user.getId(), user);
-        return "success";
+        return "add success";
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
